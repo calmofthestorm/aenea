@@ -1,0 +1,12 @@
+dist: trusty
+sudo: false
+
+install:
+ - travis_retry pip install --upgrade --user pip
+ - travis_retry ${HOME}/.local/bin/pip install --upgrade --user six
+ - travis_retry ${HOME}/.local/bin/pip install --upgrade --user pyflakes
+ - travis_retry ${HOME}/.local/bin/pip install --user -r client/requirements.txt
+
+script:
+ - PATH="${HOME}/.local/bin:${PATH}" python lint.py
+ - for fn in `ls client/test/test_*.py`; do PYTHONPATH="client:${PYTHONPATH}" python client/test/test_vocabulary.py; done
